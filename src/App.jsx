@@ -1,5 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ReactComponent as Facingicon } from "./facingIcon.svg";
+import { ReactComponent as PhotoIcon } from "./photoIcon.svg";
+import { ReactComponent as DeleteIcon } from "./deleteIcon.svg";
+import { ReactComponent as DownloadIcon } from "./downloadIcon.svg";
 import "./App.css";
 
 function App() {
@@ -8,6 +11,7 @@ function App() {
   const [facing, setFacing] = useState("user");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const canvasRef = useRef(null);
 
   const startStream = () => {
     navigator.mediaDevices
@@ -33,6 +37,36 @@ function App() {
     }
   };
 
+  const makePhoto = () => {
+    const videoWidth = videoRef.current.scrollWidth;
+    const videoHeight = videoRef.current.scrollHeight;
+    canvasRef.current.width = videoWidth;
+    canvasRef.current.height = videoHeight;
+    if (facing === "user") {
+      const context = canvasRef.current.getContext("2d");
+      context.scale(-1, 1);
+      context.drawImage(videoRef.current, 0, 0, -videoWidth, videoHeight);
+    } else {
+      canvasRef.current
+        .getContext("2d")
+        .drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+    }
+  };
+
+  const deletePhoto = () => {
+    console.log("delete");
+    const context = canvasRef.current.getContext("2d");
+    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    context.clearRect(0, 0, -canvasRef.current.width, canvasRef.current.height);
+  };
+
+  const downloadPhoto = () => {
+    const link = document.createElement("a");
+    link.download = "photo.png";
+    link.href = canvasRef.current.toDataURL("image/png");
+    link.click();
+  };
+
   useEffect(() => {
     setError(null);
     stopStream();
@@ -48,6 +82,7 @@ function App() {
         autoPlay
         ref={videoRef}
       ></video>
+      <canvas ref={canvasRef}></canvas>
       {error && <div className="error">{error}</div>}
       {isEnabled && <h1>{facing === "user" ? "Front Cam" : "Back Cam"}</h1>}
       <div className="controls">
@@ -58,6 +93,15 @@ function App() {
           onClick={() => setFacing(facing === "user" ? "environment" : "user")}
         >
           <Facingicon />
+        </button>
+        <button onClick={() => makePhoto()}>
+          <PhotoIcon />
+        </button>
+        <button onClick={() => deletePhoto()}>
+          <DeleteIcon />
+        </button>
+        <button onClick={() => downloadPhoto()}>
+          <DownloadIcon />
         </button>
       </div>
     </>
