@@ -1,16 +1,16 @@
-# React-photo
+## React-photo
 
-### `Demo:` https://dmitriyshkredov.github.io/react-photo/
+#### `Demo:` https://dmitriyshkredov.github.io/react-photo/
 
 #### `Video:` https://youtu.be/5vt0vE4Id2s
 
 ---
 
-### `git clone https://github.com/DmitriyShkredov/react-photo.git`
+#### `git clone https://github.com/DmitriyShkredov/react-photo.git`
 
-### `npm install`
+#### `npm install`
 
-### `npm start`
+#### `npm start`
 
 ---
 
