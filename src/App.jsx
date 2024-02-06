@@ -65,8 +65,10 @@ function App() {
     link.download = "curot.png";
     link.href = canvasRef.current.toDataURL("image/png");
     link.click();
-    setFacing(facing === "user" ? "environment" : "user"); // Добавлено
+    deletePhoto(); 
+    setFacing(facing === "user" ? "environment" : "user");
   };
+  
   
 
   useEffect(() => {
