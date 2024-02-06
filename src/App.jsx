@@ -7,7 +7,7 @@ import "./App.css";
 
 function App() {
   const [error, setError] = useState();
-  const [isEnabled, setEnabled] = useState(false);
+  const [isEnabled, setEnabled] = useState(true); // Изменено на true
   const [facing, setFacing] = useState("user");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -62,10 +62,12 @@ function App() {
 
   const downloadPhoto = () => {
     const link = document.createElement("a");
-    link.download = "photo.png";
+    link.download = "curot.png";
     link.href = canvasRef.current.toDataURL("image/png");
     link.click();
+    setFacing(facing === "user" ? "environment" : "user"); // Добавлено
   };
+  
 
   useEffect(() => {
     setError(null);
@@ -84,11 +86,8 @@ function App() {
       ></video>
       <canvas ref={canvasRef}></canvas>
       {error && <div className="error">{error}</div>}
-      {isEnabled && <h1>{facing === "user" ? "Front Cam" : "Back Cam"}</h1>}
+      {isEnabled && <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>}
       <div className="controls">
-        <button onClick={() => setEnabled(!isEnabled)}>
-          {isEnabled ? "Off" : "ON"}
-        </button>
         <button
           onClick={() => setFacing(facing === "user" ? "environment" : "user")}
         >
