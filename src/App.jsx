@@ -11,6 +11,7 @@ function App() {
   const streamRef = useRef(null);
   const canvasRef = useRef(null);
   const [qrCodeScanner, setQrCodeScanner] = useState(null);
+  const [qrCodeLink, setQrCodeLink] = useState(null);
 
   const startStream = () => {
     navigator.mediaDevices
@@ -75,6 +76,7 @@ function App() {
       },
       (decodedText, decodedResult) => {
         console.log(`Decoded QR Code: ${decodedText}`);
+        setQrCodeLink(decodedText); // Сохраните ссылку QR-кода
       },
       (errorMessage) => {
         console.error(`QR Code scanning failed: ${errorMessage}`);
@@ -112,10 +114,13 @@ function App() {
       {error && <div className="error">{error}</div>}
       {isEnabled && <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>}
       <div className="controls">
-        <button onClick={() => makePhoto()}>
-          <PhotoIcon />
-        </button>
+        {facing === "user" && ( // Отображайте кнопку только при использовании передней камеры
+          <button onClick={() => makePhoto()}>
+            <PhotoIcon />
+          </button>
+        )}
       </div>
+      {qrCodeLink && <div>Отметка успешно сделана</div>} {/* Отображайте сообщение, когда есть ссылка QR-кода */}
     </>
   );
 }
