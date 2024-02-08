@@ -71,7 +71,7 @@ function App() {
       { facingMode: "environment" },
       {
         fps: 10,
-        qrbox: { width: 250, height: 250 },
+        qrbox: { width: 1000, height: 1000 },
       },
       (decodedText, decodedResult) => {
         console.log(`Decoded QR Code: ${decodedText}`);
@@ -96,9 +96,14 @@ function App() {
     stopQRCodeScanner(); // Остановите сканер QR-кода
     startStream();
     if (facing === "environment") {
-      startQRCodeScanner();
+      const startScannerWhenVideoPlays = () => {
+        startQRCodeScanner();
+        videoRef.current.removeEventListener('playing', startScannerWhenVideoPlays);
+      };
+      videoRef.current.addEventListener('playing', startScannerWhenVideoPlays);
     }
   }, [facing]);
+  
 
   return (
     <>
