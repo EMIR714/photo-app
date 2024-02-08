@@ -36,6 +36,12 @@ function App() {
     }
   };
 
+  const deletePhoto = () => {
+    const context = canvasRef.current.getContext("2d");
+    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    context.clearRect(0, 0, -canvasRef.current.width, canvasRef.current.height);
+  }
+
   const makePhoto = () => {
     const videoWidth = videoRef.current.scrollWidth;
     const videoHeight = videoRef.current.scrollHeight;
@@ -54,7 +60,7 @@ function App() {
     // Сохранение фото в data
     const data = canvasRef.current.toDataURL("image/png");
     console.log(data); // здесь вы можете использовать data как вам угодно
-  
+    deletePhoto();
     // Переключение камеры
     setFacing(facing === "user" ? "environment" : "user");
   };
@@ -115,3 +121,4 @@ function App() {
 }
 
 export default App;
+
