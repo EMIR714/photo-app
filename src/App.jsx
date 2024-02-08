@@ -1,11 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ReactComponent as PhotoIcon } from "./photoIcon.svg";
-import { Html5Qrcode } from "html5-qrcode"; // Импортируйте библиотеку
+import { Html5Qrcode } from "html5-qrcode";
 import "./App.css";
 
 function App() {
   const [error, setError] = useState();
-  const [isEnabled, setEnabled] = useState(true);
   const [facing, setFacing] = useState("user");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -95,11 +94,11 @@ function App() {
     setError(null);
     stopStream();
     stopQRCodeScanner(); // Остановите сканер QR-кода
-    if (isEnabled) startStream();
+    startStream();
     if (facing === "environment") {
       startQRCodeScanner();
     }
-  }, [isEnabled, facing]);
+  }, [facing]);
 
   return (
     <>
@@ -112,13 +111,11 @@ function App() {
       ></video>
       <canvas id="qr-code-scanner" ref={canvasRef}></canvas> {/* Добавьте идентификатор элементу */}
       {error && <div className="error">{error}</div>}
-      {isEnabled && <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>}
+      <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>
       <div className="controls">
-        {facing === "user" && ( // Отображайте кнопку только при использовании передней камеры
-          <button onClick={() => makePhoto()}>
-            <PhotoIcon />
-          </button>
-        )}
+        <button onClick={() => makePhoto()}>
+          <PhotoIcon />
+        </button>
       </div>
       {qrCodeLink && <div>Отметка успешно сделана</div>} {/* Отображайте сообщение, когда есть ссылка QR-кода */}
     </>
@@ -126,4 +123,3 @@ function App() {
 }
 
 export default App;
-
