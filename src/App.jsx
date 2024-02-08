@@ -1,17 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
-import { ReactComponent as Facingicon } from "./facingIcon.svg";
 import { ReactComponent as PhotoIcon } from "./photoIcon.svg";
-import { ReactComponent as DeleteIcon } from "./deleteIcon.svg";
-import { ReactComponent as DownloadIcon } from "./downloadIcon.svg";
+import { Html5Qrcode } from "html5-qrcode"; // Импортируйте библиотеку
 import "./App.css";
 
 function App() {
   const [error, setError] = useState();
-  const [isEnabled, setEnabled] = useState(true); // Изменено на true
+  const [isEnabled, setEnabled] = useState(true);
   const [facing, setFacing] = useState("user");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const canvasRef = useRef(null);
+  const [qrCodeScanner, setQrCodeScanner] = useState(null);
 
   const startStream = () => {
     navigator.mediaDevices
@@ -51,30 +50,47 @@ function App() {
         .getContext("2d")
         .drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
     }
-  };
-
-  const deletePhoto = () => {
-    console.log("delete");
-    const context = canvasRef.current.getContext("2d");
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    context.clearRect(0, 0, -canvasRef.current.width, canvasRef.current.height);
-  };
-
-  const downloadPhoto = () => {
-    const link = document.createElement("a");
-    link.download = "curot.png";
-    link.href = canvasRef.current.toDataURL("image/png");
-    link.click();
-    deletePhoto(); 
+  
+    // Сохранение фото в data
+    const data = canvasRef.current.toDataURL("image/png");
+    console.log(data); // здесь вы можете использовать data как вам угодно
+  
+    // Переключение камеры
     setFacing(facing === "user" ? "environment" : "user");
   };
-  
-  
+
+  const startQRCodeScanner = () => {
+    const scanner = new Html5Qrcode("qr-code-scanner"); // Используйте идентификатор элемента
+    scanner.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+      },
+      (decodedText, decodedResult) => {
+        console.log(`Decoded QR Code: ${decodedText}`);
+      },
+      (errorMessage) => {
+        console.error(`QR Code scanning failed: ${errorMessage}`);
+      }
+    );
+    setQrCodeScanner(scanner); // Сохраните экземпляр сканера
+  };
+
+  const stopQRCodeScanner = () => {
+    if (qrCodeScanner) {
+      qrCodeScanner.stop().catch((err) => console.error(err));
+    }
+  };
 
   useEffect(() => {
     setError(null);
     stopStream();
+    stopQRCodeScanner(); // Остановите сканер QR-кода
     if (isEnabled) startStream();
+    if (facing === "environment") {
+      startQRCodeScanner();
+    }
   }, [isEnabled, facing]);
 
   return (
@@ -86,23 +102,12 @@ function App() {
         autoPlay
         ref={videoRef}
       ></video>
-      <canvas ref={canvasRef}></canvas>
+      <canvas id="qr-code-scanner" ref={canvasRef}></canvas> {/* Добавьте идентификатор элементу */}
       {error && <div className="error">{error}</div>}
       {isEnabled && <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>}
       <div className="controls">
-        <button
-          onClick={() => setFacing(facing === "user" ? "environment" : "user")}
-        >
-          <Facingicon />
-        </button>
         <button onClick={() => makePhoto()}>
           <PhotoIcon />
-        </button>
-        <button onClick={() => deletePhoto()}>
-          <DeleteIcon />
-        </button>
-        <button onClick={() => downloadPhoto()}>
-          <DownloadIcon />
         </button>
       </div>
     </>
