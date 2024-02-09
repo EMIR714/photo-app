@@ -113,12 +113,12 @@ function App() {
   return (
     <>
       <video
-        className={facing === "user" ? "mirror" : ""}
-        playsInline
-        muted
-        autoPlay
-        ref={videoRef}
-      ></video>
+  className={`camera-video ${facing === "user" ? "mirror" : ""}`}
+  playsInline
+  muted
+  autoPlay
+  ref={videoRef}
+></video>
       <canvas id="qrCodeContainer" ref={canvasRef} ></canvas> 
       {error && <div className="error">{error}</div>}
       <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>
