@@ -91,14 +91,6 @@ button {
 }
 
 
-#qrCodeContainer {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  border-radius: 7px;
-  overflow: hidden;
-}
-
 #qr-shaded-region {
   border-width: 50px !important;
 }
@@ -117,24 +109,14 @@ button {
 
 #qrCodeContainer {
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 600px;
+  height: 600px;
   border-radius: 7px;
   overflow: hidden;
 }
 
 #qr-shaded-region {
   border-width: 50px !important;
-}
-
-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: auto !important;
-  min-width: 100%;
-  min-height: 100%;
-  transform: translate(-50%, -50%);
 }
 
 .qr-message {
