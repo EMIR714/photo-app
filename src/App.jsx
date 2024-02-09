@@ -15,20 +15,24 @@ function App() {
 
   const startStream = () => {
     navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: {
-          facingMode: { exact: facing },
-        },
-      })
-      .then((stream) => {
-        streamRef.current = stream;
-        videoRef.current.srcObject = streamRef.current;
-        videoRef.current.onloadedmetadata = () => videoRef.current.play();
-      })
-      .catch((err) => {
-        setError(err.name);
-      });
+  .getUserMedia({
+    audio: false,
+    video: {
+      facingMode: { exact: facing },
+    },
+  })
+  .then((stream) => {
+    streamRef.current = stream;
+    videoRef.current.srcObject = streamRef.current;
+    videoRef.current.onloadedmetadata = () => {
+      videoRef.current.play();
+      videoRef.current.style.height = `${videoRef.current.videoHeight}px`;
+      videoRef.current.style.width = `${videoRef.current.videoWidth}px`;
+    };
+  })
+  .catch((err) => {
+    setError(err.name);
+  });
   };
 
   const stopStream = () => {
