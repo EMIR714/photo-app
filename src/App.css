@@ -9,22 +9,17 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100%;
-  height: 100%;
+  width: auto; /* Изменяем ширину видео, чтобы она автоматически подстраивалась под размер родительского контейнера */
+  height: auto; /* Изменяем высоту видео, чтобы она автоматически подстраивалась под размер родительского контейнера */
+  max-width: 100%; /* Устанавливаем максимальную ширину видео, чтобы оно не выходило за пределы родительского контейнера */
+  max-height: 100%; /* Устанавливаем максимальную высоту видео, чтобы оно не выходило за пределы родительского контейнера */
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   background-color: #000;
-  object-fit: cover; /* Добавьте это свойство, чтобы сохранить соотношение сторон видео */
+  object-fit: cover; /* Сохраняем соотношение сторон видео, чтобы не искажалось */
 }
-
 
 .camera-video.mirror {
-  -webkit-transform: translate(-50%, -50%) scale(-1, 1);
-  transform: translate(-50%, -50%) scale(-1, 1);
-}
-
-
-.mirror {
   -webkit-transform: translate(-50%, -50%) scale(-1, 1);
   transform: translate(-50%, -50%) scale(-1, 1);
 }
@@ -92,11 +87,6 @@ button {
   box-shadow: 0 0 4px #000;
 }
 
-
-#qr-shaded-region {
-  border-width: 50px !important;
-}
-
 .scaner {
   position: fixed;
   top: 0;
@@ -115,10 +105,6 @@ button {
   height: 600px;
   border-radius: 7px;
   overflow: hidden;
-}
-
-#qr-shaded-region {
-  border-width: 50px !important;
 }
 
 .qr-message {
