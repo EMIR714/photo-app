@@ -20,9 +20,14 @@ function App() {
     setFirstAppEnabled(false);
   };
 
-  const startStream = () => {
+  const startStream = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+    const facingMode = facing === 'user' ? 'user' : 'environment';
+    const chosenDevice = videoDevices.find(device => device.label.includes(facingMode));
+  
     navigator.mediaDevices
-      .getUserMedia({ audio: false, video: { facingMode: { exact: facing } } })
+      .getUserMedia({ audio: false, video: { deviceId: chosenDevice ? chosenDevice.deviceId : undefined } })
       .then((stream) => {
         streamRef.current = stream;
         videoRef.current.srcObject = streamRef.current;
@@ -32,6 +37,7 @@ function App() {
         setError(err.name);
       });
   };
+  
 
   const stopStream = () => {
     if (streamRef.current) {
