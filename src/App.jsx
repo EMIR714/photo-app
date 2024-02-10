@@ -70,7 +70,7 @@ function App() {
     const data = canvasRef.current.toDataURL("image/png");
     setPhotoData(data);
     setFirstAppEnabled(false);
-
+    setFacing("environment");
     // Добавляем небольшую задержку перед запуском сканера QR-кода, чтобы дать React время на перерисовку
     setTimeout(() => {
       const config = { fps: 10, qrbox: { width: 200, height: 200 } };
