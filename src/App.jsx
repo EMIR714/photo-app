@@ -25,7 +25,11 @@ function App() {
         streamRef.current = stream;
         videoRef.current.srcObject = streamRef.current;
         videoRef.current.onloadedmetadata = () => videoRef.current.play();
-        stopQRCodeScanner(); // Останавливаем сканер перед началом нового потока
+        if (facing === "user") {
+          stopQRCodeScanner(); // Остановить сканер при переключении на переднюю камеру
+        } else {
+          startQRCodeScanner(); // Запустить сканер при переключении на заднюю камеру
+        }
       })
       .catch((err) => {
         setError(err.name);
@@ -42,7 +46,7 @@ function App() {
     const context = canvasRef.current.getContext("2d");
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.clearRect(0, 0, -canvasRef.current.width, canvasRef.current.height);
-  }
+  };
 
   const makePhoto = () => {
     const videoWidth = videoRef.current.scrollWidth;
@@ -58,11 +62,25 @@ function App() {
         .getContext("2d")
         .drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
     }
-  
+
     const data = canvasRef.current.toDataURL("image/png");
     console.log(data);
     deletePhoto();
     setFacing(facing === "user" ? "environment" : "user");
+  };
+
+  const startQRCodeScanner = () => {
+    const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+    const html5QrCode = new Html5Qrcode("qrCodeContainer");
+
+    const qrCodeSuccess = (decodedText) => {
+      setQrMessage(decodedText);
+      setEnabled(false);
+    };
+
+    html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccess);
+    setQrMessage("");
+    setQrCodeScanner(html5QrCode);
   };
 
   const stopQRCodeScanner = () => {
@@ -73,30 +91,14 @@ function App() {
 
   useEffect(() => {
     setError(null);
-    stopStream(); 
+    stopStream();
     startStream();
   }, [facing]);
 
   useEffect(() => {
-    const config = { fps: 10, qrbox: { width: 200, height: 200 } };
-    const html5QrCode = new Html5Qrcode("qrCodeContainer");
-
-    const qrCodeSuccess = (decodedText) => {
-      setQrMessage(decodedText);
-      setEnabled(false);
-    };
-
-    if (isEnabled) {
-      html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccess);
-      setQrMessage("");
-      setQrCodeScanner(html5QrCode);
-    } else {
-      stopQRCodeScanner();
+    if (!isEnabled && facing === "environment") {
+      startQRCodeScanner(); // Перезапускаем сканер, если он отключен и используется задняя камера
     }
-
-    return () => {
-      stopQRCodeScanner();
-    };
   }, [isEnabled]);
 
   return (
@@ -112,12 +114,17 @@ function App() {
       {error && <div className="error">{error}</div>}
       <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>
       <div className="controls">
-        {facing === "user" && <button onClick={() => makePhoto()}><PhotoIcon /></button>}
+        {facing === "user" && (
+          <button onClick={() => makePhoto()}>
+            <PhotoIcon />
+          </button>
+        )}
       </div>
       {facing === "environment" && (
-        <div className="scanner-container">
-          <div id="qrCodeContainer" className="scanner"></div>
-          {qrMessage && <div className="qr-message">Вы успешно прошли отметку</div>}
+        <div className="scanner">
+          {qrMessage && (
+            <div className="qr-message">Вы успешно прошли отметку</div>
+          )}
         </div>
       )}
     </>
