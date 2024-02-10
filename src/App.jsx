@@ -70,25 +70,27 @@ function App() {
   };
 
   const startQRCodeScanner = () => {
+    stopStream(); // Остановить видеопоток
     const config = { fps: 10, qrbox: { width: 200, height: 200 } };
     const html5QrCode = new Html5Qrcode("qrCodeContainer");
-
+  
     const qrCodeSuccess = (decodedText) => {
       setQrMessage(decodedText);
       setEnabled(false);
     };
-
+  
     html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccess);
     setQrMessage("");
     setQrCodeScanner(html5QrCode);
   };
-
+  
   const stopQRCodeScanner = () => {
     if (qrCodeScanner) {
       qrCodeScanner.stop().catch((err) => console.error(err));
     }
+    startStream(); // Возобновить видеопоток
   };
-
+  
   useEffect(() => {
     setError(null);
     stopStream();
