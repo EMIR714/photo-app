@@ -1,3 +1,6 @@
+/* App.css */
+
+/* Стили из первого файла */
 #root {
   position: relative;
   width: 100%;
@@ -9,18 +12,13 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: auto; /* Изменяем ширину видео, чтобы она автоматически подстраивалась под размер родительского контейнера */
-  height: auto; /* Изменяем высоту видео, чтобы она автоматически подстраивалась под размер родительского контейнера */
-  max-width: 100%; /* Устанавливаем максимальную ширину видео, чтобы оно не выходило за пределы родительского контейнера */
-  max-height: 100%; /* Устанавливаем максимальную высоту видео, чтобы оно не выходило за пределы родительского контейнера */
-  -webkit-transform: translate(-50%, -50%);
+  width: auto !important;
+  min-width: 100%;
+  min-height: 100%;
   transform: translate(-50%, -50%);
-  background-color: #000;
-  object-fit: cover; /* Сохраняем соотношение сторон видео, чтобы не искажалось */
 }
 
-.camera-video.mirror {
-  -webkit-transform: translate(-50%, -50%) scale(-1, 1);
+.mirror {
   transform: translate(-50%, -50%) scale(-1, 1);
 }
 
@@ -29,21 +27,7 @@ canvas {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-}
-
-h3 {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  color: #fff;
-  text-shadow: 0 0 4px #000;
 }
 
 .error {
@@ -57,7 +41,7 @@ h3 {
   height: 100%;
   background-color: #000000;
   font-size: 20px;
-  color: rgb(255, 8, 0)(89, 255, 0);
+  color: rgb(255, 8, 0);
 }
 
 .controls {
@@ -83,10 +67,10 @@ button {
   font-weight: 700;
   color: #fff;
   cursor: pointer;
-  -webkit-box-shadow: 0 0 4px #000;
   box-shadow: 0 0 4px #000;
 }
 
+/* Стили из второго файла */
 .scaner {
   position: fixed;
   top: 0;
@@ -101,10 +85,14 @@ button {
 
 #qrCodeContainer {
   position: relative;
-  width: 600px;
-  height: 600px;
+  width: 300px;
+  height: 300px;
   border-radius: 7px;
   overflow: hidden;
+}
+
+#qr-shaded-region {
+  border-width: 50px !important;
 }
 
 .qr-message {
