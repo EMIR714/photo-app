@@ -72,14 +72,6 @@ function FrontPhoto () {
     startStream();
   }, [facing]);
 
-  useEffect(() => {
-    if (facing !== "user") {
-      stopStream();
-    } else {
-      setError(null);
-      startStream();
-    }
-  }, [facing]);
   
 
   return (
