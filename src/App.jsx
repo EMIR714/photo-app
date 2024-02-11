@@ -8,8 +8,9 @@ function App() {
 
   return (
     <div className="combined-app">
-      { facingMode === "user" && <FrontPhoto/> }  
-      { facingMode === "environment" && <QrScaner/> }
+      {/* { facingMode === "user" && <FrontPhoto/> }   */}
+      {/* { facingMode === "environment" && <QrScaner/> } */}
+      <QrScaner/>
     </div>
   );
 }
