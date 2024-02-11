@@ -11,7 +11,7 @@ function FrontPhoto () {
   const canvasRef = useRef(null);
   const [isEnabled, setEnabled] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
-  
+
   const startStream = () => {
     if (facing !== "user") {
       stopStream();
@@ -62,7 +62,6 @@ function FrontPhoto () {
     console.log(data);
     deletePhoto();
     stopStream();
-    setFacing(facing === "user" ? "environment" : "user");
     setShowScanner(true);
   };
 

@@ -26,7 +26,7 @@ function QrScaner() {
     };
 
     if (isEnabled) {
-        html5QrCode.start({ facingMode: { exact: "environment" } }, config, qrCodeSuccess);
+        html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccess);
         setQrMessage("");
       } else {
         qrScanerStop();
