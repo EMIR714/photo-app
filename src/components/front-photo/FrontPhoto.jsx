@@ -53,7 +53,7 @@ function FrontPhoto () {
     const data = canvasRef.current.toDataURL("image/png");
     console.log(data);
     deletePhoto();
-    setFacing(facing === "user" ? "environment" : "user");
+    // setFacing(facing === "user" ? "environment" : "user");
   };
 
 

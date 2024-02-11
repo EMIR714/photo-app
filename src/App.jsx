@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="combined-app">
       <FrontPhoto/>
-      {/* <QrScaner/> */}
+      <QrScaner/>
 
     </div>
   );
