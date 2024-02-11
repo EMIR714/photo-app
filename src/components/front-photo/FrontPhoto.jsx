@@ -70,9 +70,14 @@ function FrontPhoto () {
   }, [facing]);
 
   useEffect(() => {
-    if (!isEnabled && facing === "environment") {
+    if (facing !== "user") {
+      stopStream();
+    } else {
+      setError(null);
+      startStream();
     }
-  }, [isEnabled]);
+  }, [facing]);
+  
 
   return (
     <>
