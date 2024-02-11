@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ReactComponent as PhotoIcon } from "./photoIcon.svg";
 import "./frontPhoto.css";
+import QrScaner from "../qr-scaner/QrScaner";
 
 function FrontPhoto () {
   const [error, setError] = useState();
@@ -9,7 +10,8 @@ function FrontPhoto () {
   const streamRef = useRef(null);
   const canvasRef = useRef(null);
   const [isEnabled, setEnabled] = useState(true);
-
+  const [showScanner, setShowScanner] = useState(false);
+  
   const startStream = () => {
     if (facing !== "user") {
       stopStream();
@@ -59,7 +61,9 @@ function FrontPhoto () {
     const data = canvasRef.current.toDataURL("image/png");
     console.log(data);
     deletePhoto();
+    stopStream();
     setFacing(facing === "user" ? "environment" : "user");
+    setShowScanner(true);
   };
 
 
@@ -81,23 +85,27 @@ function FrontPhoto () {
 
   return (
     <>
-      <video
-        id="videoContainer"
-        className={`camera-video ${facing === "user" ? "mirror" : ""}`}
-        playsInline
-        muted
-        autoPlay
-        ref={videoRef}
-      ></video>
-      <canvas ref={canvasRef}></canvas>
-      {error && <div className="error">{error}</div>}
-      <div className="controls">
-        {facing === "user" && (
-          <button onClick={() => makePhoto()}>
-            <PhotoIcon />
-          </button>
-        )}
-      </div>
+      {showScanner ? <QrScaner/> :
+        <>
+          <video
+            id="videoContainer"
+            className={`camera-video ${facing === "user" ? "mirror" : ""}`}
+            playsInline
+            muted
+            autoPlay
+            ref={videoRef}
+          ></video>
+          <canvas ref={canvasRef}></canvas>
+          {error && <div className="error">{error}</div>}
+          <div className="controls">
+            {facing === "user" && (
+              <button onClick={() => makePhoto()}>
+                <PhotoIcon />
+              </button>
+            )}
+          </div>
+        </>
+      }
     </>
   );
 }
