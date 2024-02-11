@@ -11,6 +11,11 @@ function FrontPhoto () {
   const [isEnabled, setEnabled] = useState(true);
 
   const startStream = () => {
+    if (facing !== "user") {
+      stopStream();
+      return;
+    }
+  
     navigator.mediaDevices
       .getUserMedia({ audio: false, video: { facingMode: { exact: facing } } })
       .then((stream) => {
@@ -22,6 +27,7 @@ function FrontPhoto () {
         setError(err.name);
       });
   };
+  
 
   const stopStream = () => {
     if (streamRef.current) {
@@ -53,7 +59,7 @@ function FrontPhoto () {
     const data = canvasRef.current.toDataURL("image/png");
     console.log(data);
     deletePhoto();
-    // setFacing(facing === "user" ? "environment" : "user");
+    setFacing(facing === "user" ? "environment" : "user");
   };
 
 
@@ -80,7 +86,6 @@ function FrontPhoto () {
       ></video>
       <canvas ref={canvasRef}></canvas>
       {error && <div className="error">{error}</div>}
-      <h3>{facing === "user" ? "FRONT CAM" : "BACK CAM"}</h3>
       <div className="controls">
         {facing === "user" && (
           <button onClick={() => makePhoto()}>
