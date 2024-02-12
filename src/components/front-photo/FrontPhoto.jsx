@@ -100,6 +100,14 @@ function FrontPhoto () {
       });
     }
   }
+  const toggleCamera = () => {
+    if (isEnabled) {
+      stopStream();
+    } else {
+      startStream();
+    }
+    setEnabled(!isEnabled);
+  };
 
   useEffect(() => {
     checkLocation();
@@ -125,9 +133,11 @@ function FrontPhoto () {
           {error && <div className="error">{error}</div>}
           <div className="controls">
             {facing === "user" && (
-              <button onClick={() => makePhoto()}>
-                <PhotoIcon />
-              </button>
+              <>
+                <button onClick={() => makePhoto()}>
+                  <PhotoIcon />
+                </button>
+              </>
             )}
           </div>
         </>
