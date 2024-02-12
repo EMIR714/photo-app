@@ -11,6 +11,23 @@ function FrontPhoto () {
   const canvasRef = useRef(null);
   const [isEnabled, setEnabled] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
+  const [locationError, setLocationError] = useState(null);
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // радиус Земли в метрах
+    const φ1 = lat1 * Math.PI/180; // φ, λ в радианах
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const d = R * c; // в метрах
+    return d;
+  }
 
   const startStream = () => {
     if (facing !== "user") {
@@ -65,8 +82,25 @@ function FrontPhoto () {
     setShowScanner(true);
   };
 
+  const checkLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation не поддерживается вашим браузером');
+    } else {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const distance = calculateDistance(lat, lon, 42.84408, 74.58649);
+        if (distance > 200) {
+          setLocationError('Вы находитесь далеко от заданной точки');
+        }
+      }, () => {
+        setLocationError('Не удалось получить ваше местоположение');
+      });
+    }
+  }
 
   useEffect(() => {
+    checkLocation();
     setError(null);
     stopStream();
     startStream();
