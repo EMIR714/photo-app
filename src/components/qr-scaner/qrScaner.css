@@ -40,25 +40,42 @@ video {
     transform: translate(-50%, -50%);
 }
 
-.qr-message {
+.scaner table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .scaner th, .scaner td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .scaner th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .scaner td {
+    color: #ffffff;
+  }
+  .qr-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     padding: 20px;
-    display: -webkit-flex; 
-    display: -ms-flexbox; 
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    -webkit-justify-content: center; 
-    -ms-flex-pack: center; 
     align-items: center;
-    -webkit-align-items: center; 
-    -ms-flex-align: center; 
     background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .qr-message {
     font-size: 18px;
     color: rgb(255, 255, 255);
     text-align: center;
     word-break: break-all;
-}
+  }

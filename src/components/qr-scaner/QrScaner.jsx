@@ -21,9 +21,14 @@ function QrScaner() {
     };
 
     const qrCodeSuccess = (decodedText) => {
-      setQrMessage(decodedText);
-      setEnabled(false);
-    };
+  const urlParts = decodedText.split('/');
+  const campus = urlParts[4];
+  const room = urlParts[5];
+  console.log(`Кампус: ${campus}, Аудитория: ${room}`); // Выводим номер кампуса и аудитории в консоль
+  setQrMessage(decodedText);
+  setEnabled(false);
+};
+    
 
     if (isEnabled) {
         html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccess);
@@ -40,9 +45,29 @@ function QrScaner() {
   return (
     <div className="scaner">
       <div id="qrCodeContainer" />
-      {qrMessage && <div className="qr-message">Вы успешно прошли отметку</div>}
+      {qrMessage && 
+        <div className="qr-container">
+          <div className="qr-message">Вы успешно прошли отметку</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Кампус</th>
+                <th>Аудитория</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{new Date().toLocaleString()}</td>
+                <td>{qrMessage.split('/')[4]}</td>
+                <td>{qrMessage.split('/')[5]}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
-  );
+  );  
 }
 
 export default QrScaner;
