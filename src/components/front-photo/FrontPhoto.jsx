@@ -1,7 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { ReactComponent as PhotoIcon } from "./photoIcon.svg";
 import "./frontPhoto.css";
 import QrScaner from "../qr-scaner/QrScaner";
+import ScanDataContext from "../ScanDataContext";
 
 function FrontPhoto () {
   const [error, setError] = useState();
@@ -12,6 +13,7 @@ function FrontPhoto () {
   const [isEnabled, setEnabled] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
   const [locationError, setLocationError] = useState(null);
+  const { setScanData } = useContext(ScanDataContext);
 
   const startStream = () => {
     if (facing !== "user") {
@@ -60,7 +62,7 @@ function FrontPhoto () {
     }
 
     const data = canvasRef.current.toDataURL("image/png");
-    console.log(data);
+    setScanData(prevData => ({ ...prevData, photo: data }));
     deletePhoto();
     stopStream();
     setShowScanner(true);
@@ -89,25 +91,17 @@ function FrontPhoto () {
       navigator.geolocation.getCurrentPosition((position) => {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        console.log(`Широта: ${lat}, Долгота: ${lon}`); // Выводим геолокацию в консоль
+        setScanData(prevData => ({ ...prevData, latitude: lat, longitude: lon }));
         const distance = calculateDistance(lat, lon, 42.8476501, 74.5814659);
         if (distance > 200) {
           setLocationError('Вы находитесь далеко от заданной точки');
-          setEnabled(false); // Отключаем камеру
+          setEnabled(false); 
         }
       }, () => {
         setLocationError('Не удалось получить ваше местоположение');
       });
     }
   }
-  const toggleCamera = () => {
-    if (isEnabled) {
-      stopStream();
-    } else {
-      startStream();
-    }
-    setEnabled(!isEnabled);
-  };
 
   useEffect(() => {
     checkLocation();

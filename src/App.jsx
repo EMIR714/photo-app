@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import FrontPhoto from "./components/front-photo/FrontPhoto";
-import QrScaner from "./components/qr-scaner/QrScaner";
 import "./App.css";
+import ScanDataContext from "./components/ScanDataContext";
+
 
 function App() {
   const [cameraEnabled, setCameraEnabled] = useState(false);
-
+  const [scanData, setScanData] = useState(null);
   const toggleCamera = () => {
     setCameraEnabled(!cameraEnabled);
   };
 
+  console.log(scanData)
   return (
+    <ScanDataContext.Provider value={{ scanData, setScanData }}>
     <div className="combined-app">
       {!cameraEnabled ? (
         <button onClick={toggleCamera} 
@@ -21,7 +24,8 @@ function App() {
         <FrontPhoto />
       )}
     </div>
+    </ScanDataContext.Provider>
   );
 }
 
-export default App;
+export default App; 

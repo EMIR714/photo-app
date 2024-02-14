@@ -1,10 +1,12 @@
 import { Html5Qrcode } from "html5-qrcode";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./qrScaner.css";
+import ScanDataContext from "../ScanDataContext";
 
 function QrScaner() {
   const [isEnabled, setEnabled] = useState(true);
   const [qrMessage, setQrMessage] = useState("");
+  const { scanData, setScanData } = useContext(ScanDataContext);
 
   useEffect(() => {
     const config = { fps: 10, qrbox: { width: 200, height: 200 } };
@@ -22,9 +24,10 @@ function QrScaner() {
 
     const qrCodeSuccess = (decodedText) => {
   const urlParts = decodedText.split('/');
-  const campus = urlParts[4];
+  const campus = urlParts[3];
+  const corpus = urlParts[4];
   const room = urlParts[5];
-  console.log(`Кампус: ${campus}, Аудитория: ${room}`); // Выводим номер кампуса и аудитории в консоль
+  setScanData(prevData => ({ ...prevData, campus, corpus, room, scanTime: new Date() }));
   setQrMessage(decodedText);
   setEnabled(false);
 };
