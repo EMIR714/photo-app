@@ -55,7 +55,7 @@ function QrScaner() {
             <thead>
               <tr>
                 <th>Дата</th>
-                <th>Кампус</th>
+                <th>Корпус</th>
                 <th>Аудитория</th>
               </tr>
             </thead>
