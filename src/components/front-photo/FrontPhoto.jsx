@@ -104,7 +104,7 @@ function FrontPhoto () {
   } */
 
   useEffect(() => {
-    checkLocation();
+   /* checkLocation();*/
     setError(null);
     stopStream();
     startStream();
