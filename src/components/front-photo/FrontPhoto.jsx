@@ -84,7 +84,7 @@ function FrontPhoto () {
     return d;
   }
 
-  const checkLocation = () => {
+  /* const checkLocation = () => {
     if (!navigator.geolocation) {
       setLocationError('Geolocation не поддерживается вашим браузером');
     } else {
@@ -101,7 +101,7 @@ function FrontPhoto () {
         setLocationError('Не удалось получить ваше местоположение');
       });
     }
-  }
+  } */
 
   useEffect(() => {
     checkLocation();
