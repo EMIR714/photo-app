@@ -20,7 +20,7 @@ function FrontPhoto () {
       stopStream();
       return;
     }
-  
+
     navigator.mediaDevices
       .getUserMedia({ audio: false, video: { facingMode: { exact: facing } } })
       .then((stream) => {
@@ -32,7 +32,7 @@ function FrontPhoto () {
         setError(err.name);
       });
   };
-  
+
 
   const stopStream = () => {
     if (streamRef.current) {
