@@ -1,4 +1,4 @@
-#### `git clone https://github.com/DmitriyShkredov/react-photo.git`
+#### `git clone `https://github.com/EMIR714/photo-app`
 
 #### `npm install`
 
